@@ -11,7 +11,7 @@
 ## Enlaces de Entrega y Despliegue Público
 
 - **Aplicación Web Publicada (URL activa):** https://bolsalab-udem.web.app
-- **Repositorio Público en GitHub:** *(completar enlace final del repositorio tras el push)*
+- **Repositorio Público en GitHub:** https://github.com/Dylan1Financiero/bolsalab-quant-bot
 - **Infraestructura Cloud:** Máquina Virtual en Google Cloud Compute Engine (`systemd` activo 24/7) + Cloud Firestore + Firebase Hosting + Firebase Authentication + Telegram Bot API + Gate.io Futures Testnet
 
 ---
