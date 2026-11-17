@@ -1,0 +1,13 @@
+gate-api
+python-telegram-bot
+google-genai
+python-dotenv
+firebase-admin
+scikit-learn
+scipy
+pandas
+numpy
+matplotlib
+openpyxl
+psutil
+catboost

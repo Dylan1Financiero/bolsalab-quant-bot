@@ -1,0 +1,1439 @@
+{
+ "_leeme": "Cada figura se dibuja con codigo a partir de estos puntos; no se necesitan imagenes. x = numero de vela, y = nivel de precio en unidades abstractas (se multiplica por una escala al azar). puntos = formacion que ve el jugador; continuacion = como se resolvio (se revela al responder); lineas = trazos chartistas a dibujar al revelar; ruptura = vela donde se marca la flecha con el texto de etiqueta. Roles de linea: resistencia (rojo), soporte (verde), cuello o nivel clave (lila), fibonacci (ambar: niveles 38.2, 50 y 61.8).",
+ "niveles": [
+  {
+   "xp": 0,
+   "nombre": "Novato"
+  },
+  {
+   "xp": 50,
+   "nombre": "Aprendiz"
+  },
+  {
+   "xp": 150,
+   "nombre": "Analista"
+  },
+  {
+   "xp": 300,
+   "nombre": "Chartista"
+  },
+  {
+   "xp": 600,
+   "nombre": "Maestro del gráfico"
+  }
+ ],
+ "figuras": [
+  {
+   "id": "dobleTecho",
+   "nombre": "Doble techo",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 100],
+    [18, 120],
+    [28, 110],
+    [38, 120.5],
+    [48, 110]
+   ],
+   "continuacion": [
+    [52, 107],
+    [56, 110.5],
+    [68, 98]
+   ],
+   "ruptura": 50,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [14, 120.3],
+     "hasta": [42, 120.3],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [14, 110],
+     "hasta": [58, 110],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Dos máximos casi al mismo nivel separados por un valle. El precio intenta superar el primer máximo y no puede.",
+   "senal": "Se confirma cuando el precio cierra por debajo del valle (línea de cuello).",
+   "como_se_opera": "Venta en la ruptura del cuello. Objetivo: la altura de la figura proyectada hacia abajo. Stop sobre los máximos."
+  },
+  {
+   "id": "doblePiso",
+   "nombre": "Doble piso",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 120],
+    [18, 100],
+    [28, 110],
+    [38, 99.5],
+    [48, 110]
+   ],
+   "continuacion": [
+    [52, 113],
+    [56, 109.5],
+    [68, 122]
+   ],
+   "ruptura": 50,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [14, 99.7],
+     "hasta": [42, 99.7],
+     "rol": "soporte"
+    },
+    {
+     "desde": [14, 110],
+     "hasta": [58, 110],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Dos mínimos casi al mismo nivel separados por un rebote. Los vendedores no logran un mínimo nuevo.",
+   "senal": "Se confirma cuando el precio cierra por encima del pico intermedio (línea de cuello).",
+   "como_se_opera": "Compra en la ruptura del cuello. Objetivo: la altura de la figura proyectada hacia arriba. Stop bajo los mínimos."
+  },
+  {
+   "id": "hch",
+   "nombre": "Hombro-cabeza-hombro",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 98],
+    [10, 112],
+    [17, 106],
+    [27, 121],
+    [37, 106],
+    [45, 112],
+    [52, 106]
+   ],
+   "continuacion": [
+    [55, 103],
+    [58, 106.5],
+    [70, 91]
+   ],
+   "ruptura": 54,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [13, 106],
+     "hasta": [60, 106],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Tres máximos: el del centro (cabeza) es más alto que los dos de los lados (hombros).",
+   "senal": "Se confirma al perder la línea de cuello que une los dos valles.",
+   "como_se_opera": "Venta al romper el cuello. Objetivo: distancia de la cabeza al cuello hacia abajo. Stop sobre el hombro derecho."
+  },
+  {
+   "id": "hchInv",
+   "nombre": "Hombro-cabeza-hombro invertido",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 122],
+    [10, 108],
+    [17, 114],
+    [27, 99],
+    [37, 114],
+    [45, 108],
+    [52, 114]
+   ],
+   "continuacion": [
+    [55, 117],
+    [58, 113.5],
+    [70, 129]
+   ],
+   "ruptura": 54,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [13, 114],
+     "hasta": [60, 114],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Tres mínimos: el del centro es más profundo que los dos de los lados.",
+   "senal": "Se confirma al superar la línea de cuello que une los dos picos.",
+   "como_se_opera": "Compra al romper el cuello. Objetivo: distancia de la cabeza al cuello hacia arriba. Stop bajo el hombro derecho."
+  },
+  {
+   "id": "triAsc",
+   "nombre": "Triángulo ascendente",
+   "direccion": "sube",
+   "tipo": "Continuación alcista",
+   "puntos": [
+    [0, 98],
+    [10, 120],
+    [16, 106],
+    [24, 120],
+    [30, 110],
+    [37, 120],
+    [42, 114],
+    [47, 120]
+   ],
+   "continuacion": [
+    [50, 124],
+    [53, 120.5],
+    [66, 135]
+   ],
+   "ruptura": 49,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 120],
+     "hasta": [50, 120],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [16, 106],
+     "hasta": [48, 115.8],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Resistencia horizontal y mínimos cada vez más altos: los compradores presionan el mismo techo.",
+   "senal": "Ruptura de la resistencia, mejor si llega con volumen.",
+   "como_se_opera": "Compra en la ruptura. Objetivo: la base del triángulo proyectada desde la ruptura. Stop bajo el último mínimo."
+  },
+  {
+   "id": "triDesc",
+   "nombre": "Triángulo descendente",
+   "direccion": "baja",
+   "tipo": "Continuación bajista",
+   "puntos": [
+    [0, 122],
+    [10, 100],
+    [16, 114],
+    [24, 100],
+    [30, 110],
+    [37, 100],
+    [42, 106],
+    [47, 100]
+   ],
+   "continuacion": [
+    [50, 96],
+    [53, 99.5],
+    [66, 85]
+   ],
+   "ruptura": 49,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 100],
+     "hasta": [50, 100],
+     "rol": "soporte"
+    },
+    {
+     "desde": [16, 114],
+     "hasta": [48, 104.2],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Soporte horizontal y máximos cada vez más bajos: los vendedores presionan el mismo piso.",
+   "senal": "Ruptura del soporte, mejor si llega con volumen.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: la base del triángulo proyectada hacia abajo. Stop sobre el último máximo."
+  },
+  {
+   "id": "triSim",
+   "nombre": "Triángulo simétrico alcista",
+   "direccion": "sube",
+   "tipo": "Continuación alcista",
+   "puntos": [
+    [0, 90],
+    [10, 120],
+    [17, 102],
+    [25, 116],
+    [31, 105],
+    [37, 113],
+    [42, 107],
+    [46, 111]
+   ],
+   "continuacion": [
+    [50, 116],
+    [53, 112.5],
+    [66, 131]
+   ],
+   "ruptura": 48,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [10, 120],
+     "hasta": [48, 110.2],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [17, 102],
+     "hasta": [48, 108.2],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Máximos más bajos y mínimos más altos que convergen. Es una pausa; suele romper a favor de la tendencia previa (aquí venía subiendo).",
+   "senal": "Ruptura de una de las dos líneas antes de llegar al vértice.",
+   "como_se_opera": "Opera en la dirección de la ruptura. Objetivo: la base del triángulo. Stop al otro lado de la figura."
+  },
+  {
+   "id": "banderaAlc",
+   "nombre": "Bandera alcista",
+   "direccion": "sube",
+   "tipo": "Continuación alcista",
+   "puntos": [
+    [0, 88],
+    [4, 89],
+    [14, 118],
+    [19, 113.5],
+    [23, 116.5],
+    [28, 111],
+    [32, 114],
+    [37, 109],
+    [41, 112]
+   ],
+   "continuacion": [
+    [45, 117],
+    [48, 114.5],
+    [60, 139]
+   ],
+   "ruptura": 43,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [14, 118.6],
+     "hasta": [44, 111.6],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [19, 113.5],
+     "hasta": [44, 107.3],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Subida casi vertical (el asta) seguida de un canal pequeño inclinado hacia abajo (la bandera).",
+   "senal": "Ruptura del lado superior del canal.",
+   "como_se_opera": "Compra en la ruptura. Objetivo: el largo del asta proyectado desde la ruptura. Stop bajo la bandera."
+  },
+  {
+   "id": "banderaBaj",
+   "nombre": "Bandera bajista",
+   "direccion": "baja",
+   "tipo": "Continuación bajista",
+   "puntos": [
+    [0, 132],
+    [4, 131],
+    [14, 102],
+    [19, 106.5],
+    [23, 103.5],
+    [28, 109],
+    [32, 106],
+    [37, 111],
+    [41, 108]
+   ],
+   "continuacion": [
+    [45, 103],
+    [48, 105.5],
+    [60, 81]
+   ],
+   "ruptura": 43,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [14, 101.4],
+     "hasta": [44, 108.4],
+     "rol": "soporte"
+    },
+    {
+     "desde": [19, 106.5],
+     "hasta": [44, 112.7],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Caída casi vertical (el asta) seguida de un canal pequeño inclinado hacia arriba.",
+   "senal": "Ruptura del lado inferior del canal.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: el largo del asta proyectado hacia abajo. Stop sobre la bandera."
+  },
+  {
+   "id": "cunaAsc",
+   "nombre": "Cuña ascendente",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 95],
+    [8, 108],
+    [13, 103],
+    [21, 114],
+    [26, 110.5],
+    [33, 118],
+    [38, 115.5],
+    [44, 120.5],
+    [48, 118.5]
+   ],
+   "continuacion": [
+    [51, 114.5],
+    [54, 117],
+    [68, 99]
+   ],
+   "ruptura": 50,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 108],
+     "hasta": [50, 122.6],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [13, 103],
+     "hasta": [50, 119.4],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Máximos y mínimos crecientes, pero las dos líneas se cierran: la subida pierde fuerza.",
+   "senal": "Ruptura de la línea inferior.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: el inicio de la cuña. Stop sobre el último máximo."
+  },
+  {
+   "id": "cunaDesc",
+   "nombre": "Cuña descendente",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 125],
+    [8, 112],
+    [13, 117],
+    [21, 106],
+    [26, 109.5],
+    [33, 102],
+    [38, 104.5],
+    [44, 99.5],
+    [48, 101.5]
+   ],
+   "continuacion": [
+    [51, 105.5],
+    [54, 103],
+    [68, 121]
+   ],
+   "ruptura": 50,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 112],
+     "hasta": [50, 97.4],
+     "rol": "soporte"
+    },
+    {
+     "desde": [13, 117],
+     "hasta": [50, 100.6],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Máximos y mínimos decrecientes con líneas que se cierran: la caída pierde fuerza.",
+   "senal": "Ruptura de la línea superior.",
+   "como_se_opera": "Compra en la ruptura. Objetivo: el inicio de la cuña. Stop bajo el último mínimo."
+  },
+  {
+   "id": "rectangulo",
+   "nombre": "Rectángulo alcista",
+   "direccion": "sube",
+   "tipo": "Continuación alcista",
+   "puntos": [
+    [0, 92],
+    [10, 115],
+    [16, 107],
+    [23, 115],
+    [30, 107],
+    [37, 115],
+    [44, 107],
+    [50, 115]
+   ],
+   "continuacion": [
+    [53, 119],
+    [56, 115.5],
+    [68, 129]
+   ],
+   "ruptura": 52,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 115.2],
+     "hasta": [54, 115.2],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [8, 106.8],
+     "hasta": [54, 106.8],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "El precio rebota entre un soporte y una resistencia horizontales. Suele continuar la tendencia previa (aquí venía subiendo).",
+   "senal": "Cierre fuera del rango.",
+   "como_se_opera": "Opera la ruptura. Objetivo: la altura del rango. Stop dentro del rango."
+  },
+  {
+   "id": "rectanguloBaj",
+   "nombre": "Rectángulo bajista",
+   "direccion": "baja",
+   "tipo": "Continuación bajista",
+   "puntos": [
+    [0, 128],
+    [10, 105],
+    [16, 113],
+    [23, 105],
+    [30, 113],
+    [37, 105],
+    [44, 113],
+    [50, 105]
+   ],
+   "continuacion": [
+    [53, 101],
+    [56, 104.5],
+    [68, 91]
+   ],
+   "ruptura": 52,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 104.8],
+     "hasta": [54, 104.8],
+     "rol": "soporte"
+    },
+    {
+     "desde": [8, 113.2],
+     "hasta": [54, 113.2],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Rango horizontal entre soporte y resistencia después de una caída. Es una pausa de la tendencia bajista.",
+   "senal": "Cierre por debajo del soporte del rango.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: la altura del rango hacia abajo. Stop dentro del rango."
+  },
+  {
+   "id": "triSimBaj",
+   "nombre": "Triángulo simétrico bajista",
+   "direccion": "baja",
+   "tipo": "Continuación bajista",
+   "puntos": [
+    [0, 130],
+    [10, 100],
+    [17, 118],
+    [25, 104],
+    [31, 115],
+    [37, 107],
+    [42, 113],
+    [46, 109]
+   ],
+   "continuacion": [
+    [50, 104],
+    [53, 107.5],
+    [66, 89]
+   ],
+   "ruptura": 48,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [10, 100],
+     "hasta": [48, 109.8],
+     "rol": "soporte"
+    },
+    {
+     "desde": [17, 118],
+     "hasta": [48, 111.8],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Máximos más bajos y mínimos más altos que convergen después de una caída. Suele romper a favor de la tendencia previa, que era bajista.",
+   "senal": "Ruptura de la línea inferior antes de llegar al vértice.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: la base del triángulo hacia abajo. Stop sobre la línea superior."
+  },
+  {
+   "id": "tripleTecho",
+   "nombre": "Triple techo",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 100],
+    [10, 120],
+    [17, 110],
+    [25, 120.5],
+    [32, 110],
+    [40, 120],
+    [47, 110]
+   ],
+   "continuacion": [
+    [50, 107],
+    [53, 110.5],
+    [66, 97]
+   ],
+   "ruptura": 49,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 120.3],
+     "hasta": [42, 120.3],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [15, 110],
+     "hasta": [55, 110],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Tres máximos casi al mismo nivel. El precio falla tres veces en la misma resistencia.",
+   "senal": "Se confirma al perder el soporte que une los dos valles.",
+   "como_se_opera": "Venta en la ruptura del soporte. Objetivo: la altura de la figura hacia abajo. Stop sobre los máximos."
+  },
+  {
+   "id": "tripleSuelo",
+   "nombre": "Triple suelo",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 120],
+    [10, 100],
+    [17, 110],
+    [25, 99.5],
+    [32, 110],
+    [40, 100],
+    [47, 110]
+   ],
+   "continuacion": [
+    [50, 113],
+    [53, 109.5],
+    [66, 123]
+   ],
+   "ruptura": 49,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 99.7],
+     "hasta": [42, 99.7],
+     "rol": "soporte"
+    },
+    {
+     "desde": [15, 110],
+     "hasta": [55, 110],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Tres mínimos casi al mismo nivel. Los vendedores fallan tres veces en el mismo soporte.",
+   "senal": "Se confirma al superar la resistencia que une los dos picos.",
+   "como_se_opera": "Compra en la ruptura. Objetivo: la altura de la figura hacia arriba. Stop bajo los mínimos."
+  },
+  {
+   "id": "banderinAlc",
+   "nombre": "Banderín alcista",
+   "direccion": "sube",
+   "tipo": "Continuación alcista",
+   "puntos": [
+    [0, 88],
+    [4, 89],
+    [14, 118],
+    [18, 112],
+    [22, 116.5],
+    [26, 112.8],
+    [30, 115.6],
+    [34, 113.4],
+    [37, 114.4]
+   ],
+   "continuacion": [
+    [40, 118],
+    [43, 115.8],
+    [56, 138]
+   ],
+   "ruptura": 39,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [14, 117.4],
+     "hasta": [40, 114.5],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [18, 112],
+     "hasta": [40, 113.9],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Subida casi vertical (asta) seguida de un triángulo pequeño y breve. Se distingue de la bandera porque sus líneas convergen.",
+   "senal": "Ruptura de la línea superior del banderín.",
+   "como_se_opera": "Compra en la ruptura. Objetivo: el largo del asta proyectado desde la ruptura. Stop bajo el banderín."
+  },
+  {
+   "id": "banderinBaj",
+   "nombre": "Banderín bajista",
+   "direccion": "baja",
+   "tipo": "Continuación bajista",
+   "puntos": [
+    [0, 132],
+    [4, 131],
+    [14, 102],
+    [18, 108],
+    [22, 103.5],
+    [26, 107.2],
+    [30, 104.4],
+    [34, 106.6],
+    [37, 105.6]
+   ],
+   "continuacion": [
+    [40, 102],
+    [43, 104.2],
+    [56, 82]
+   ],
+   "ruptura": 39,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [14, 102.6],
+     "hasta": [40, 105.5],
+     "rol": "soporte"
+    },
+    {
+     "desde": [18, 108],
+     "hasta": [40, 106.1],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Caída casi vertical (asta) seguida de un triángulo pequeño y breve.",
+   "senal": "Ruptura de la línea inferior del banderín.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: el largo del asta hacia abajo. Stop sobre el banderín."
+  },
+  {
+   "id": "canalAlc",
+   "nombre": "Canal alcista",
+   "direccion": "sube",
+   "tipo": "Tendencia",
+   "puntos": [
+    [0, 92],
+    [8, 104],
+    [14, 98],
+    [23, 112],
+    [29, 106],
+    [38, 120],
+    [44, 114]
+   ],
+   "continuacion": [
+    [52, 126],
+    [56, 122],
+    [66, 134]
+   ],
+   "ruptura": 45,
+   "etiqueta": "Rebote",
+   "lineas": [
+    {
+     "desde": [8, 104],
+     "hasta": [66, 134.9],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [14, 98],
+     "hasta": [66, 125.7],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "El precio sube entre dos líneas paralelas: la de abajo une los mínimos (soporte) y la de arriba los máximos (resistencia).",
+   "senal": "Mientras respete la línea inferior, la tendencia sigue. Cada toque de esa línea es una zona de compra.",
+   "como_se_opera": "Compra en el rebote sobre la línea inferior. Objetivo: la línea superior. Stop bajo el canal; si lo pierde, la tendencia cambió."
+  },
+  {
+   "id": "canalBaj",
+   "nombre": "Canal bajista",
+   "direccion": "baja",
+   "tipo": "Tendencia",
+   "puntos": [
+    [0, 128],
+    [8, 116],
+    [14, 122],
+    [23, 108],
+    [29, 114],
+    [38, 100],
+    [44, 106]
+   ],
+   "continuacion": [
+    [52, 94],
+    [56, 98],
+    [66, 86]
+   ],
+   "ruptura": 45,
+   "etiqueta": "Rechazo",
+   "lineas": [
+    {
+     "desde": [8, 116],
+     "hasta": [66, 85.1],
+     "rol": "soporte"
+    },
+    {
+     "desde": [14, 122],
+     "hasta": [66, 94.3],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "El precio baja entre dos líneas paralelas: la de arriba une los máximos y la de abajo los mínimos.",
+   "senal": "Mientras respete la línea superior, la tendencia sigue. Cada toque de esa línea es una zona de venta.",
+   "como_se_opera": "Venta en el rechazo de la línea superior. Objetivo: la línea inferior. Stop sobre el canal."
+  },
+  {
+   "id": "sueloRedondeado",
+   "nombre": "Suelo redondeado (platillo)",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 122],
+    [6, 116],
+    [12, 110.5],
+    [18, 106.5],
+    [24, 104.5],
+    [30, 104],
+    [36, 105],
+    [42, 107.5],
+    [47, 111.5],
+    [51, 116]
+   ],
+   "continuacion": [
+    [54, 121],
+    [57, 118.5],
+    [68, 132]
+   ],
+   "ruptura": 54,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [2, 120.5],
+     "hasta": [58, 120.5],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "La caída se frena poco a poco, el precio se aplana y empieza a subir despacio: dibuja un plato.",
+   "senal": "Se confirma al superar el nivel donde empezó el platillo.",
+   "como_se_opera": "Compra en la ruptura de ese nivel. Objetivo: la profundidad del platillo hacia arriba. Stop bajo el último retroceso."
+  },
+  {
+   "id": "techoRedondeado",
+   "nombre": "Techo redondeado",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 98],
+    [6, 104],
+    [12, 109.5],
+    [18, 113.5],
+    [24, 115.5],
+    [30, 116],
+    [36, 115],
+    [42, 112.5],
+    [47, 108.5],
+    [51, 104]
+   ],
+   "continuacion": [
+    [54, 99],
+    [57, 101.5],
+    [68, 88]
+   ],
+   "ruptura": 54,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [2, 99.5],
+     "hasta": [58, 99.5],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "La subida pierde fuerza poco a poco, el precio se aplana y empieza a caer despacio: un plato invertido.",
+   "senal": "Se confirma al perder el nivel donde empezó la figura.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: la altura del techo hacia abajo. Stop sobre el último rebote."
+  },
+  {
+   "id": "tazaAsa",
+   "nombre": "Taza con asa",
+   "direccion": "sube",
+   "tipo": "Continuación alcista",
+   "puntos": [
+    [0, 100],
+    [5, 119],
+    [10, 113],
+    [16, 108],
+    [22, 106],
+    [28, 108],
+    [34, 113],
+    [39, 119],
+    [43, 115],
+    [46, 114],
+    [49, 117]
+   ],
+   "continuacion": [
+    [52, 122],
+    [55, 119.5],
+    [68, 134]
+   ],
+   "ruptura": 51,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [4, 119.3],
+     "hasta": [56, 119.3],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Una base redondeada (la taza) que regresa a su máximo, seguida de un retroceso corto y pequeño (el asa).",
+   "senal": "Ruptura de la resistencia que marcan los bordes de la taza.",
+   "como_se_opera": "Compra en la ruptura. Objetivo: la profundidad de la taza hacia arriba. Stop bajo el asa."
+  },
+  {
+   "id": "tazaInv",
+   "nombre": "Taza con asa invertida",
+   "direccion": "baja",
+   "tipo": "Continuación bajista",
+   "puntos": [
+    [0, 120],
+    [5, 101],
+    [10, 107],
+    [16, 112],
+    [22, 114],
+    [28, 112],
+    [34, 107],
+    [39, 101],
+    [43, 105],
+    [46, 106],
+    [49, 103]
+   ],
+   "continuacion": [
+    [52, 98],
+    [55, 100.5],
+    [68, 86]
+   ],
+   "ruptura": 51,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [4, 100.7],
+     "hasta": [56, 100.7],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Un techo redondeado que regresa a su mínimo, seguido de un rebote corto y pequeño (el asa).",
+   "senal": "Ruptura del soporte que marcan los bordes de la taza.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: la altura de la taza hacia abajo. Stop sobre el asa."
+  },
+  {
+   "id": "sueloV",
+   "nombre": "Suelo en V",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 124],
+    [8, 118],
+    [14, 121],
+    [22, 110],
+    [30, 96],
+    [38, 110],
+    [44, 117]
+   ],
+   "continuacion": [
+    [47, 121.5],
+    [50, 119],
+    [66, 133]
+   ],
+   "ruptura": 47,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [12, 121],
+     "hasta": [52, 121],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Caída fuerte seguida de inmediato por una subida igual de fuerte, sin base ni pausa.",
+   "senal": "Se confirma al superar el último máximo relevante de la caída.",
+   "como_se_opera": "Compra al superar ese máximo. Es una figura rápida y difícil: tamaño de posición pequeño y stop bajo el retroceso."
+  },
+  {
+   "id": "techoV",
+   "nombre": "Techo en V (pico)",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 96],
+    [8, 102],
+    [14, 99],
+    [22, 110],
+    [30, 124],
+    [38, 110],
+    [44, 103]
+   ],
+   "continuacion": [
+    [47, 98.5],
+    [50, 101],
+    [66, 87]
+   ],
+   "ruptura": 47,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [12, 99],
+     "hasta": [52, 99],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Subida fuerte seguida de inmediato por una caída igual de fuerte, sin zona de distribución.",
+   "senal": "Se confirma al perder el último mínimo relevante de la subida.",
+   "como_se_opera": "Venta al perder ese mínimo. Figura rápida: tamaño de posición pequeño y stop sobre el rebote."
+  },
+  {
+   "id": "ensanchTecho",
+   "nombre": "Ensanchamiento (megáfono) en techo",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 98],
+    [8, 112],
+    [14, 107],
+    [22, 116.2],
+    [29, 103],
+    [38, 121],
+    [46, 98.5]
+   ],
+   "continuacion": [
+    [50, 103],
+    [54, 96],
+    [66, 87]
+   ],
+   "ruptura": 54,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 112],
+     "hasta": [44, 122.8],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [14, 107],
+     "hasta": [56, 95.8],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Máximos cada vez más altos y mínimos cada vez más bajos: las líneas se abren. Refleja un mercado nervioso y sin control.",
+   "senal": "Después del tercer máximo, la ruptura de la línea inferior.",
+   "como_se_opera": "Venta al perder la línea inferior. Objetivo: la amplitud de la figura. Stop amplio: es una figura volátil."
+  },
+  {
+   "id": "ensanchSuelo",
+   "nombre": "Ensanchamiento (megáfono) en suelo",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 122],
+    [8, 108],
+    [14, 113],
+    [22, 103.8],
+    [29, 117],
+    [38, 99],
+    [46, 121.5]
+   ],
+   "continuacion": [
+    [50, 117],
+    [54, 124],
+    [66, 133]
+   ],
+   "ruptura": 54,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 108],
+     "hasta": [44, 97.2],
+     "rol": "soporte"
+    },
+    {
+     "desde": [14, 113],
+     "hasta": [56, 124.2],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Mínimos cada vez más bajos y máximos cada vez más altos después de una caída: las líneas se abren.",
+   "senal": "Después del tercer mínimo, la ruptura de la línea superior.",
+   "como_se_opera": "Compra al superar la línea superior. Objetivo: la amplitud de la figura. Stop amplio."
+  },
+  {
+   "id": "diamanteTecho",
+   "nombre": "Diamante en techo",
+   "direccion": "baja",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 96],
+    [8, 110],
+    [12, 107],
+    [18, 116],
+    [24, 101],
+    [30, 120],
+    [36, 104.5],
+    [41, 115],
+    [45, 107],
+    [48, 111.5]
+   ],
+   "continuacion": [
+    [51, 105.5],
+    [54, 108],
+    [66, 93]
+   ],
+   "ruptura": 50,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 110],
+     "hasta": [30, 120],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [30, 120],
+     "hasta": [49, 111.4],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [12, 107],
+     "hasta": [24, 101],
+     "rol": "soporte"
+    },
+    {
+     "desde": [24, 101],
+     "hasta": [52, 109.1],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Primero el precio se ensancha y luego se estrecha: un megáfono seguido de un triángulo forman un rombo. Es poco frecuente.",
+   "senal": "Ruptura de la línea inferior derecha del rombo.",
+   "como_se_opera": "Venta en la ruptura. Objetivo: la altura máxima del rombo hacia abajo. Stop sobre el último máximo."
+  },
+  {
+   "id": "diamanteSuelo",
+   "nombre": "Diamante en suelo",
+   "direccion": "sube",
+   "tipo": "Cambio de tendencia",
+   "puntos": [
+    [0, 124],
+    [8, 110],
+    [12, 113],
+    [18, 104],
+    [24, 119],
+    [30, 100],
+    [36, 115.5],
+    [41, 105],
+    [45, 113],
+    [48, 108.5]
+   ],
+   "continuacion": [
+    [51, 114.5],
+    [54, 112],
+    [66, 127]
+   ],
+   "ruptura": 50,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [8, 110],
+     "hasta": [30, 100],
+     "rol": "soporte"
+    },
+    {
+     "desde": [30, 100],
+     "hasta": [49, 108.6],
+     "rol": "soporte"
+    },
+    {
+     "desde": [12, 113],
+     "hasta": [24, 119],
+     "rol": "resistencia"
+    },
+    {
+     "desde": [24, 119],
+     "hasta": [52, 110.9],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Un rombo después de una caída: el precio se ensancha y luego se estrecha.",
+   "senal": "Ruptura de la línea superior derecha del rombo.",
+   "como_se_opera": "Compra en la ruptura. Objetivo: la altura máxima del rombo hacia arriba. Stop bajo el último mínimo."
+  },
+  {
+   "id": "polaridadBaj",
+   "nombre": "Soporte que se vuelve resistencia",
+   "direccion": "baja",
+   "tipo": "Lectura de niveles",
+   "puntos": [
+    [0, 124],
+    [8, 110],
+    [15, 118],
+    [22, 110.3],
+    [29, 117],
+    [35, 110],
+    [39, 104],
+    [43, 106],
+    [47, 109.6]
+   ],
+   "continuacion": [
+    [50, 106],
+    [53, 107.5],
+    [66, 93]
+   ],
+   "ruptura": 47,
+   "etiqueta": "Rechazo",
+   "lineas": [
+    {
+     "desde": [6, 110],
+     "hasta": [54, 110],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Un soporte que aguantó varias veces se rompe. Cuando el precio regresa a ese nivel, ahora lo frena: cambió de papel.",
+   "senal": "El regreso al nivel roto (pullback) falla y el precio vuelve a caer.",
+   "como_se_opera": "Venta en el rechazo del nivel. Stop apenas encima del nivel. Objetivo: el siguiente soporte."
+  },
+  {
+   "id": "polaridadAlc",
+   "nombre": "Resistencia que se vuelve soporte",
+   "direccion": "sube",
+   "tipo": "Lectura de niveles",
+   "puntos": [
+    [0, 96],
+    [8, 110],
+    [15, 102],
+    [22, 109.7],
+    [29, 103],
+    [35, 110],
+    [39, 116],
+    [43, 114],
+    [47, 110.4]
+   ],
+   "continuacion": [
+    [50, 114],
+    [53, 112.5],
+    [66, 127]
+   ],
+   "ruptura": 47,
+   "etiqueta": "Rebote",
+   "lineas": [
+    {
+     "desde": [6, 110],
+     "hasta": [54, 110],
+     "rol": "cuello"
+    }
+   ],
+   "que_es": "Una resistencia que frenó varias veces se rompe. Cuando el precio regresa a ese nivel, ahora lo sostiene.",
+   "senal": "El regreso al nivel roto (throwback) aguanta y el precio vuelve a subir.",
+   "como_se_opera": "Compra en el rebote sobre el nivel. Stop apenas debajo del nivel. Objetivo: la siguiente resistencia."
+  },
+  {
+   "id": "trampaAlc",
+   "nombre": "Falsa ruptura alcista (trampa de toros)",
+   "direccion": "baja",
+   "tipo": "Lectura de niveles",
+   "puntos": [
+    [0, 100],
+    [9, 118],
+    [16, 110],
+    [24, 118],
+    [31, 111],
+    [38, 118.2],
+    [42, 122],
+    [45, 116.5]
+   ],
+   "continuacion": [
+    [48, 117.5],
+    [52, 112],
+    [66, 100]
+   ],
+   "ruptura": 42,
+   "etiqueta": "Falsa ruptura",
+   "lineas": [
+    {
+     "desde": [7, 118.2],
+     "hasta": [52, 118.2],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "El precio supera la resistencia, atrae compradores y enseguida regresa por debajo. La ruptura no se sostuvo.",
+   "senal": "Cierre de vuelta dentro del rango después de haber roto.",
+   "como_se_opera": "Venta al regresar bajo la resistencia. Stop sobre el máximo de la falsa ruptura. Objetivo: el soporte del rango."
+  },
+  {
+   "id": "trampaBaj",
+   "nombre": "Falsa ruptura bajista (trampa de osos)",
+   "direccion": "sube",
+   "tipo": "Lectura de niveles",
+   "puntos": [
+    [0, 120],
+    [9, 102],
+    [16, 110],
+    [24, 102],
+    [31, 109],
+    [38, 101.8],
+    [42, 98],
+    [45, 103.5]
+   ],
+   "continuacion": [
+    [48, 102.5],
+    [52, 108],
+    [66, 120]
+   ],
+   "ruptura": 42,
+   "etiqueta": "Falsa ruptura",
+   "lineas": [
+    {
+     "desde": [7, 101.8],
+     "hasta": [52, 101.8],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "El precio pierde el soporte, atrae vendedores y enseguida regresa por encima. La ruptura no se sostuvo.",
+   "senal": "Cierre de vuelta dentro del rango después de haber roto.",
+   "como_se_opera": "Compra al regresar sobre el soporte. Stop bajo el mínimo de la falsa ruptura. Objetivo: la resistencia del rango."
+  },
+  {
+   "id": "tendAlcRota",
+   "nombre": "Ruptura de línea de tendencia alcista",
+   "direccion": "baja",
+   "tipo": "Lectura de tendencia",
+   "puntos": [
+    [0, 92],
+    [8, 106],
+    [13, 101],
+    [22, 114],
+    [27, 108.5],
+    [36, 121],
+    [41, 116],
+    [45, 119.5],
+    [48, 113]
+   ],
+   "continuacion": [
+    [51, 115.5],
+    [54, 111],
+    [66, 98]
+   ],
+   "ruptura": 47,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [13, 101],
+     "hasta": [52, 121.9],
+     "rol": "soporte"
+    }
+   ],
+   "que_es": "Una línea que une mínimos crecientes sostiene la subida. Aquí el precio hace un máximo más bajo y cierra por debajo de la línea.",
+   "senal": "Cierre claro bajo la línea de tendencia, mejor si antes hubo un máximo más bajo.",
+   "como_se_opera": "Venta en la ruptura o en el regreso a la línea. Stop sobre el último máximo. Objetivo: el mínimo anterior."
+  },
+  {
+   "id": "tendBajRota",
+   "nombre": "Ruptura de línea de tendencia bajista",
+   "direccion": "sube",
+   "tipo": "Lectura de tendencia",
+   "puntos": [
+    [0, 128],
+    [8, 114],
+    [13, 119],
+    [22, 106],
+    [27, 111.5],
+    [36, 99],
+    [41, 104],
+    [45, 100.5],
+    [48, 107]
+   ],
+   "continuacion": [
+    [51, 104.5],
+    [54, 109],
+    [66, 122]
+   ],
+   "ruptura": 47,
+   "etiqueta": "Ruptura",
+   "lineas": [
+    {
+     "desde": [13, 119],
+     "hasta": [52, 98.1],
+     "rol": "resistencia"
+    }
+   ],
+   "que_es": "Una línea que une máximos decrecientes dirige la caída. Aquí el precio hace un mínimo más alto y cierra por encima de la línea.",
+   "senal": "Cierre claro sobre la línea de tendencia, mejor si antes hubo un mínimo más alto.",
+   "como_se_opera": "Compra en la ruptura o en el regreso a la línea. Stop bajo el último mínimo. Objetivo: el máximo anterior."
+  },
+  {
+   "id": "fibAlc",
+   "nombre": "Retroceso de Fibonacci en tendencia alcista",
+   "direccion": "sube",
+   "tipo": "Lectura de niveles",
+   "puntos": [
+    [0, 90],
+    [6, 96],
+    [10, 93.5],
+    [22, 130],
+    [28, 122],
+    [31, 125],
+    [40, 105.5],
+    [44, 109]
+   ],
+   "continuacion": [
+    [48, 114],
+    [51, 111],
+    [66, 134]
+   ],
+   "ruptura": 40,
+   "etiqueta": "Rebote en 61.8%",
+   "lineas": [
+    {
+     "desde": [22, 114.7],
+     "hasta": [56, 114.7],
+     "rol": "fibonacci"
+    },
+    {
+     "desde": [22, 110],
+     "hasta": [56, 110],
+     "rol": "fibonacci"
+    },
+    {
+     "desde": [22, 105.3],
+     "hasta": [56, 105.3],
+     "rol": "fibonacci"
+    }
+   ],
+   "que_es": "Después de un impulso alcista, el precio corrige hasta la zona de 38.2%–61.8% del impulso y ahí encuentra compradores.",
+   "senal": "Rebote con velas alcistas dentro de la zona de Fibonacci (aquí en 61.8%).",
+   "como_se_opera": "Compra en el rebote. Stop bajo el 61.8% o bajo el inicio del impulso. Objetivo: el máximo anterior y su extensión."
+  },
+  {
+   "id": "fibBaj",
+   "nombre": "Retroceso de Fibonacci en tendencia bajista",
+   "direccion": "baja",
+   "tipo": "Lectura de niveles",
+   "puntos": [
+    [0, 130],
+    [6, 124],
+    [10, 126.5],
+    [22, 90],
+    [28, 98],
+    [31, 95],
+    [40, 114.5],
+    [44, 111]
+   ],
+   "continuacion": [
+    [48, 106],
+    [51, 109],
+    [66, 86]
+   ],
+   "ruptura": 40,
+   "etiqueta": "Rechazo en 61.8%",
+   "lineas": [
+    {
+     "desde": [22, 105.3],
+     "hasta": [56, 105.3],
+     "rol": "fibonacci"
+    },
+    {
+     "desde": [22, 110],
+     "hasta": [56, 110],
+     "rol": "fibonacci"
+    },
+    {
+     "desde": [22, 114.7],
+     "hasta": [56, 114.7],
+     "rol": "fibonacci"
+    }
+   ],
+   "que_es": "Después de un impulso bajista, el precio rebota hasta la zona de 38.2%–61.8% del impulso y ahí encuentra vendedores.",
+   "senal": "Rechazo con velas bajistas dentro de la zona de Fibonacci (aquí en 61.8%).",
+   "como_se_opera": "Venta en el rechazo. Stop sobre el 61.8% o sobre el inicio del impulso. Objetivo: el mínimo anterior y su extensión."
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+.env
+firebase-credenciales.json
+*-firebase-adminsdk-*.json
+trading_bot.log*
+__pycache__/
+.firebase/
+node_modules/
+vm/env_vm.txt
+*_respaldo.py

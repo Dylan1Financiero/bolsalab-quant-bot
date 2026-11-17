@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Guía de Estudio y Defensa Individual — BolsaLab &amp; Bot Quant x10</title>
+<style>
+  @page { size: letter; margin: 16mm 15mm; }
+  :root {
+    --ink: #0f172a;
+    --ink2: #334155;
+    --muted: #64748b;
+    --accent: #5b21b6;
+    --accent-bg: #f5f3ff;
+    --border: #cbd5e1;
+    --good: #047857;
+    --good-bg: #ecfdf5;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    line-height: 1.5;
+    font-size: 10.5pt;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+  .doc-header {
+    border-bottom: 2.5px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+  .eyebrow {
+    font-size: 8.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin: 0 0 4px;
+  }
+  h1 {
+    font-size: 19pt;
+    line-height: 1.18;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+  .subtitle {
+    font-size: 9.8pt;
+    color: var(--ink2);
+    margin: 0;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    padding: 8px 10px;
+    border-radius: 4px;
+  }
+  h2 {
+    font-size: 13.5pt;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    margin: 18px 0 8px;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 11pt;
+    color: var(--ink);
+    margin: 12px 0 5px;
+    page-break-after: avoid;
+  }
+  p { margin: 5px 0; }
+  ul, ol { margin: 5px 0 8px; padding-left: 18px; }
+  li { margin-bottom: 4px; }
+  .formula {
+    font-family: var(--mono);
+    font-size: 9.2pt;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin: 6px 0;
+    color: #1e1b4b;
+    page-break-inside: avoid;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 11px;
+    margin-bottom: 9px;
+    page-break-inside: avoid;
+  }
+  .qa-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 11px;
+    margin-bottom: 7px;
+    background: #fafafa;
+    page-break-inside: avoid;
+  }
+  .qa-q { font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+  .checklist {
+    background: var(--good-bg);
+    border: 1px solid #6ee7b7;
+    border-radius: 6px;
+    padding: 10px 12px;
+    page-break-inside: avoid;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 9pt;
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.2pt;
+    margin: 8px 0 12px;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 5px 7px;
+    text-align: left;
+  }
+  th { background: var(--accent-bg); color: var(--accent); font-weight: 700; }
+  .num { text-align: right; font-family: var(--mono); }
+  .page-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <p class="eyebrow">Proyecto Final Integrador · Finanzas Computacionales · Defensa 19 de noviembre de 2026</p>
+  <h1>Guía de Estudio, Funcionamiento Interno y Defensa Individual — BolsaLab &amp; Bot Quant x10</h1>
+  <p class="subtitle">
+    <strong>Objetivo:</strong> Dominar de memoria el funcionamiento real del bot en la Máquina Virtual (Google Cloud), cada indicador técnico, la matemática de gestión de riesgo (VaR, CVaR, CAViaR, ATR), la validación estadística Diebold-Mariano, la optimización de Markowitz con Matriz de Pearson y responder con seguridad las preguntas del profesor.
+  </p>
+</div>
+
+<h2>1. Arquitectura General y Flujo en Tiempo Real (¿Qué pasa cada minuto?)</h2>
+<p>El ecosistema opera las 24 horas con <strong>4 componentes conectados vía Cloud Firestore</strong> sin abrir puertos en el servidor:</p>
+<ol>
+  <li><strong>Máquina Virtual en Google Cloud (Compute Engine e2-small · Ubuntu LTS):</strong> Corre <code>bot_trading.py</code> bajo <code>systemd</code> (<code>bot-quant.service</code> con reinicio automático en 15 s) y registra todo en <code>trading_bot.log</code> con 3 hilos + ciclo asíncrono de Telegram:
+    <ul>
+      <li><code>background_monitor</code>: cada <strong>12 s</strong> (en 1m/5m) o <strong>35 s</strong> (&ge;15m) verifica salidas TP/SL y evalúa nuevas velas cerradas en <code>step_auto_trading()</code>.</li>
+      <li><code>_fb_bucle_estado</code>: cada <strong>30 s</strong> descarga velas reales y publica <code>bot/estado</code> (precio, señal, semáforo CAViaR, posición, CPU/RAM/uptime) y <code>bot/velas</code> (300 velas).</li>
+      <li><code>_fb_bucle_precios</code>: cada <strong>60 s</strong> actualiza <code>mercado/precios</code> para los 28 activos del catálogo.</li>
+      <li>Listeners <code>on_snapshot</code>: escuchan en vivo <code>comandos/</code> (cambios desde la app web) y <code>consultas/</code> (preguntas a Gemini IA).</li>
+    </ul>
+  </li>
+  <li><strong>Gate.io Producción (datos) vs. Gate.io Futures Testnet (ejecución):</strong> Las velas se descargan de <strong>Producción</strong> (<code>api.gateio.ws</code>) porque el testnet genera mechas artificiales ("barcodes") que dañan Bollinger, Chartismo y RSI; las órdenes se envían al <strong>Testnet</strong> (<code>api-testnet.gateapi.io</code>) con margen de <strong>$100 USDT</strong> y apalancamiento <strong>x10</strong> (<strong>x15</strong> en XRP alta convicción).</li>
+  <li><strong>Telegram + Espejo en Vivo:</strong> Un hook sobre <code>ExtBot</code> copia en tiempo real mensajes, botones, gráficas PNG y archivos Excel a <code>telegram_espejo</code> para verlos en la web.</li>
+  <li><strong>Aplicación Web Pública:</strong> <code>https://bolsalab-udem.web.app</code> (React + TradingView Lightweight Charts + Firebase Auth + Firestore).</li>
+</ol>
+
+<h2>2. Los 6 Indicadores y Estrategias del Bot (Uno por Uno)</h2>
+
+<div class="card">
+  <h3>2.1. Bandas de Bollinger (20, 2σ) + Filtro de Tendencia EMA 200 &mdash; <em>Estrategia Activa Final</em></h3>
+  <div class="formula">MA₂₀ = (1/20) Σ Cₜ₋ᵢ &nbsp;|&nbsp; BB_sup = MA₂₀ + 2·σ₂₀ &nbsp;|&nbsp; BB_inf = MA₂₀ − 2·σ₂₀ &nbsp;|&nbsp; EMA₂₀₀,ₜ = α·Cₜ + (1−α)·EMA₂₀₀,ₜ₋₁ (α = 2/201)</div>
+  <p><strong>Qué miden:</strong> Canal estadístico de ±2 desviaciones estándar alrededor del promedio de 20 velas (~95% de los precios normales). Cuando el precio rompe una banda y <em>regresa adentro</em>, señala sobre-extensión y reversión a la media. La EMA 200 define la tendencia estructural.</p>
+  <p><strong>Regla exacta en código:</strong> <strong>LONG</strong> si vela previa cerró &lt; <code>bb_dn</code>, vela actual cierra &ge; <code>bb_dn</code> <strong>y</strong> <code>spot &gt; ema_200</code>. <strong>SHORT</strong> si vela previa cerró &gt; <code>bb_up</code>, vela actual cierra &le; <code>bb_up</code> <strong>y</strong> <code>spot &le; ema_200</code>.</p>
+  <p><strong>Evidencia:</strong> A favor de EMA 200 dio PF <strong>1.67</strong> (XRP), 1.31 (ETH), 1.24 (SOL), 1.11 (BTC); en contra bajaba a 1.02 / 0.87 / 0.88. Sin bloqueo RF en XRP: <strong>133 ops (22/día), WR 24.8%, PF 2.25, +70 USDT</strong> (IC 95%: 1.36–3.38).</p>
+</div>
+
+<div class="card">
+  <h3>2.2. Fibonacci + Abanicos + Líneas de Velocidad + Ángulos de Gann</h3>
+  <div class="formula">Nivel(r) = Max − (Max − Min)·r &nbsp;(r ∈ 23.6%, 38.2%, 50.0%, 61.8%, 78.6%) &nbsp;|&nbsp; Velocidad: 1/3 y 2/3 &nbsp;|&nbsp; Gann: 1×1, 1×2 (50%), 1×4 (75%)</div>
+  <p><strong>Qué mide y regla:</strong> Calcula retrocesos desde el mínimo/máximo estructural de 120 velas, rectas de velocidad (1/3 y 2/3), abanico de 3 directrices y ángulos de Gann. Entra en rebotes sobre 38.2%/61.8% o rupturas de la 3ª directriz / línea 1/3. En backtest 1m dio <strong>PF 0.98</strong> (parte de las 21 ops de la Etapa 2); se reemplazó por Bollinger.</p>
+</div>
+
+<div class="card">
+  <h3>2.3. Chartismo Estructural v3.2 + Filtro Anti-Mechas + Anti-Clímax</h3>
+  <div class="formula">Mediana robusta (&le; 2.0 ATR) → Pivotes ZigZag → Patrón vivo (_pattern_alive) → Confirmación: EMA 200 + Cuerpo &ge; 0.6 ATR + Vol &ge; 1.2× + RSI [26–74]</div>
+  <p><strong>Qué detecta:</strong> HCH / HCH Invertido (prio 95), Canal R² &ge; 0.78 (92), Doble Techo/Suelo (90), Bandera (86), Cuñas (85), Triángulos (78–82) y Rectángulo (75). En 1m dio <strong>PF 0.99</strong> por el ruido intradía en rupturas.</p>
+</div>
+
+<div class="card">
+  <h3>2.4. RSI (14) de Wilder</h3>
+  <div class="formula">RSI = 100 · Ganancias_media(14) / (Ganancias_media(14) + Pérdidas_media(14)) &nbsp;(escala 0–100; &gt;70 sobrecompra, &lt;30 sobreventa)</div>
+  <p><strong>Regla:</strong> LONG al cruzar arriba de 30 con <code>spot &gt; ema_200</code>; SHORT al cruzar debajo de 70 con <code>spot &le; ema_200</code>. Resultado: <strong>PF 1.13</strong> en XRP.</p>
+</div>
+
+<div class="card">
+  <h3>2.5. Cruce de Medias Exponenciales (EMA 50 / EMA 200)</h3>
+  <div class="formula">Golden Cross: EMA₅₀ cruza arriba de EMA₂₀₀ (LONG) &nbsp;|&nbsp; Death Cross: EMA₅₀ cruza abajo de EMA₂₀₀ (SHORT)</div>
+  <p><strong>Resultado:</strong> <strong>PF 1.44</strong> en XRP, rentable pero genera muy pocas señales en 1m; por ello EMA 200 actúa mejor como filtro de tendencia.</p>
+</div>
+
+<div class="card">
+  <h3>2.6. SuperTrend (10, 3.0) y Motor de Salidas ATR (14)</h3>
+  <div class="formula">TRₜ = max(H−L, |H−Cₜ₋₁|, |L−Cₜ₋₁|) &nbsp;|&nbsp; ATR₁₄ = media(TR, 14) &nbsp;|&nbsp; TP = Entrada ± 2.0·ATR₁₄ &nbsp;|&nbsp; SL = Entrada ∓ 0.4·ATR₁₄</div>
+  <p>SuperTrend como señal de entrada tuvo el peor resultado (<strong>PF 0.75</strong> por latigazos laterales), pero <strong>ATR(14)</strong> fija dinámicamente el Take Profit y Stop Loss en proporción exacta <strong>5 : 1</strong>.</p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>3. Gestión de Riesgo Cuantitativa: VaR, CVaR, CAViaR y Geometría 5:1</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Clase de Activo</th>
+      <th>Métrica Automática</th>
+      <th>Fórmula Exacta (ventana 150 velas)</th>
+      <th class="num">Límite Rojo</th>
+      <th>Por qué esa métrica</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Criptomonedas</strong></td>
+      <td><strong>CAViaR 99%</strong> (Engle &amp; Manganelli, 2004)</td>
+      <td><code>qₜ = 0.04 + 0.86·qₜ₋₁ + 0.38·|rₜ₋₁|</code></td>
+      <td class="num"><strong>1.50%</strong></td>
+      <td>Reacciona de inmediato al choque reciente <code>|rₜ₋₁|</code> en mercados 24/7</td>
+    </tr>
+    <tr>
+      <td><strong>Acciones EE.UU.</strong></td>
+      <td><strong>CVaR 99%</strong> (Expected Shortfall)</td>
+      <td><code>CVaR₉₉% = −E[ r | r &le; q₀.₀₁(r) ]</code></td>
+      <td class="num"><strong>2.20%</strong></td>
+      <td>Promedia todas las pérdidas extremas del peor 1% (riesgo de cola)</td>
+    </tr>
+    <tr>
+      <td><strong>ETFs / Cartera</strong></td>
+      <td><strong>VaR 99%</strong> (o 95% diario en cartera)</td>
+      <td><code>VaR₉₉% = −Percentil₁%(retornos)</code></td>
+      <td class="num"><strong>1.50%</strong></td>
+      <td>Marca el umbral de pérdida que solo se rebasa en 1% (o 5%) de casos</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="formula">WR* de equilibrio = SL / (TP + SL) = 0.4 / (2.0 + 0.4) = 16.7% &nbsp;|&nbsp; Profit Factor = Σ Ganancias / |Σ Pérdidas|</div>
+<ul>
+  <li><strong>Exposición y Liquidación:</strong> Margen fijo <strong>$100 USDT</strong> a <strong>x10</strong> ($1,000 nocional). Liquidación al ±9%; SL máximo topado al <code>6.5%</code> (nunca liquida antes del SL). En <code>XRP_USDT</code>, si el RF estima <code>prob &ge; 50%</code> y <code>Valor Esperado &ge; 0.15%</code>, sube dinámicamente a <strong>x15</strong> ($1,500 nocional).</li>
+  <li><strong>Criterio conservador en el monitor:</strong> Ante una vela cerrada que haya tocado ambos niveles, evalúa en orden estricto <code>LIQ → SL → TP</code> (asume pérdida primero).</li>
+</ul>
+
+<h2>4. Machine Learning, Diebold-Mariano y Portafolios (Markowitz + Pearson)</h2>
+<ul>
+  <li><strong>Por qué quitamos el bloqueo RF para entradas:</strong> En BTC 1h (393 train / 171 test, purga de 6 velas), Random Forest (50 árboles, prof 4: MAE $645.91, RMSE $877.55) vence a CatBoost (<strong>DM −3.11, p = 0.002</strong>), pero empata contra la caminata aleatoria (<strong>DM +1.11, p = 0.267</strong>). Además, el ATR pronosticó mejor el rango TP/SL a 12 velas (<strong>DM +5.10, p &lt; 0.001</strong>).</li>
+  <li><strong>Comparativa en XRP (1m, TP 2.0 / SL 0.4 ATR):</strong> Filtro estricto = 58 ops (9/día), PF 3.53, +$59 | Veto = 97 ops (16/día), PF 2.63, +$64 | <strong>Sin filtro (final en vivo) = 133 ops (22/día), PF 2.25, +$70</strong>. En las 4 criptos sin filtro = 491 ops (PF 1.64).</li>
+  <li><strong>Diebold-Mariano (Harvey et al., 1997):</strong> <code>dₜ = e²_modelo,t − e²_ingenuo,t</code>, <code>DM = d̄ / √V̂(d̄)</code>. <code>DM &lt; 0</code> y <code>p &lt; 0.05</code> = modelo significativamente mejor; <code>DM &gt; 0</code> y <code>p &lt; 0.05</code> = peor que el ingenuo.</li>
+  <li><strong>Portafolios (Opciones 1, 2, 5 y 6.2):</strong> Panel diario de 17 variables estandarizadas. <strong>KNN</strong> usa Distancia Euclidiana <code>d(x, xᵢ) = √Σ(xⱼ − xᵢⱼ)²</code> con ponderación inversa. Markowitz mezcla <strong>50% ML + 50% histórico</strong> (<code>μ = 0.5 μ_ML + 0.5 μ_hist</code>) y usa la <strong>Matriz de Correlación de Pearson</strong> (<code>Σᵢⱼ = ρᵢⱼ σᵢ σⱼ</code>) para diversificar combinando activos con correlación baja o negativa (ej. bonos <code>TLT</code> vs renta variable).</li>
+</ul>
+
+<h2>5. Checklist Pre-Defensa (30 Minutos Antes de Exponer)</h2>
+<div class="checklist">
+  <ol>
+    <li>En la VM: verificar que el proceso esté activo y ejecutar <code>python3 bot_trading.py --verificar</code> (todo en <code>OK</code>: Telegram, Gemini, Grok, Testnet Gate y Firebase).</li>
+    <li>Abrir <code>https://bolsalab-udem.web.app</code>: verificar encabezado verde <strong>Bot en línea</strong>, gráfica de <code>XRP/USDT (1m)</code>, operaciones recientes de Bollinger en <em>Resultados</em> y espejo de Telegram activo.</li>
+    <li>En <em>Portafolio</em>: tener un portafolio calculado para recorrer los 3 pasos (o usar <strong>Ver todo</strong>) y mostrar la Matriz de Correlación de Pearson sin esperar cálculos.</li>
+    <li>En Telegram: tener el chat abierto para pulsar <strong>Reporte Pro + Gráfico Dark</strong> o enviar <code>/vm</code> en vivo durante la exposición.</li>
+  </ol>
+</div>
+
+<h2>6. Banco de 20 Preguntas Clave del Profesor (Respuestas Directas)</h2>
+<div class="qa-item"><div class="qa-q">1. ¿Qué hace exactamente tu bot en la VM y dónde corre?</div>Corre 24/7 como servicio <code>systemd</code> en Google Cloud Compute Engine, lee velas reales de Gate.io Producción y Yahoo Finance, aplica Bollinger + EMA 200, valida riesgo CAViaR/CVaR/VaR 99%, ejecuta en Gate.io Futures Testnet y sincroniza Telegram y Firebase Firestore.</div>
+<div class="qa-item"><div class="qa-q">2. ¿Por qué analizan velas de Gate.io Producción y ejecutan órdenes en Testnet?</div>Porque el Testnet genera mechas artificiales ("barcodes") sin liquidez real que dispararían señales falsas; leemos velas de producción y mandamos la ejecución al Testnet para probar sin arriesgar capital real.</div>
+<div class="qa-item"><div class="qa-q">3. Explica las Bandas de Bollinger y la regla de entrada.</div>Canal de Media(20) ± 2σ₂₀. Si la vela previa cierra fuera de la banda y la actual reingresa dentro, señala reversión a la media, siempre que sea a favor de la EMA 200 (LONG arriba, SHORT abajo).</div>
+<div class="qa-item"><div class="qa-q">4. ¿Por qué filtran con EMA 200?</div>En 4 criptos, Bollinger con EMA 200 dio PF 1.67 (XRP), 1.31 (ETH) y 1.24 (SOL); sin filtro de tendencia caía a 1.02 / 0.87 / 0.88 por operar contra tendencia.</div>
+<div class="qa-item"><div class="qa-q">5. ¿Cómo gana con solo ~25% de Win Rate?</div>Por la relación TP/SL de 5:1 (TP 2.0 ATR vs SL 0.4 ATR). El equilibrio es <code>WR* = 0.4/2.4 = 16.7%</code>; cada acierto cubre cinco pérdidas (PF 2.25 en backtest XRP).</div>
+<div class="qa-item"><div class="qa-q">6. ¿Por qué las 21 operaciones viejas tenían 81% Win Rate y aun así perdían (-$10.57)?</div>Eran de la Etapa 2 (Fibonacci/SuperTrend con TP corto ~0.05%): ganaban +$0.54 promedio pero perdían -$4.92 (WR* = 90.2%, PF 0.46). Monte Carlo probó esa falla y motivó cambiar a Bollinger 5:1, donde las operaciones reales ya muestran ganancias mayores a las pérdidas.</div>
+<div class="qa-item"><div class="qa-q">7. ¿Por qué quitaron el filtro RF para entrar y para qué sigue en el bot?</div>Diebold-Mariano mostró que RF vence a CatBoost (p=0.002) pero no a la caminata aleatoria (p=0.27), y bloqueando entradas operaba solo ~9 veces/día (hasta 15h parado). Sin filtro opera 22 veces/día (+$70, PF 2.25) y el RF decide el apalancamiento dinámico x15 en XRP.</div>
+<div class="qa-item"><div class="qa-q">8. ¿Cómo se calcula CAViaR y por qué en cripto?</div><code>qₜ = 0.04 + 0.86·qₜ₋₁ + 0.38·|rₜ₋₁|</code>. Reacciona al instante al último choque <code>|rₜ₋₁|</code> en mercados 24/7 sin esperar a que una ventana móvil lenta promedie 150 velas pasadas.</div>
+<div class="qa-item"><div class="qa-q">9. Diferencia entre VaR y CVaR:</div>VaR es el corte del peor 1% o 5%; CVaR promedia todas las pérdidas peores que ese corte (mide qué tan destructiva es la cola).</div>
+<div class="qa-item"><div class="qa-q">10. Qué indica Diebold-Mariano (DM y p):</div>Si <code>DM &lt; 0</code> y <code>p &lt; 0.05</code>, el modelo vence al ingenuo estadísticamente. Si <code>DM &gt; 0</code> y <code>p &lt; 0.05</code>, es significativamente peor. Si <code>p &ge; 0.05</code>, empata.</div>
+<div class="qa-item"><div class="qa-q">11. ¿Por qué BTC (51% vol) puede salir BAJO y Oro (19%) ALTO en Portafolio?</div>El clasificador evalúa el régimen actual contra los propios terciles históricos de cada activo (su estado propio vs últimos 5 años), y aparte mostramos la volatilidad anual absoluta y topes máximos de peso a cripto.</div>
+<div class="qa-item"><div class="qa-q">12. ¿Cómo usan KNN en Portafolios?</div>Estandarizando 17 variables con <code>StandardScaler</code> y midiendo Distancia Euclidiana <code>√Σ(xⱼ−xᵢⱼ)²</code> ponderada por 1/d.</div>
+<div class="qa-item"><div class="qa-q">13. ¿Por qué mezclan 50% ML + 50% histórico en Markowitz?</div>Para evitar inestabilidad y pesos extremos ante errores de pronóstico en el vector μ (regularización tipo shrinkage).</div>
+<div class="qa-item"><div class="qa-q">14. ¿Qué aporta la Matriz de Correlación de Pearson?</div>Define <code>Σᵢⱼ = ρᵢⱼσᵢσⱼ</code>: permite combinar activos descorrelacionados o negativos (ej. bonos TLT vs tech/cripto) reduciendo la volatilidad total de la cartera.</div>
+<div class="qa-item"><div class="qa-q">15. Diferencia entre Sharpe y Sortino:</div>Sharpe divide entre toda la desviación estándar; Sortino divide solo entre la desviación de retornos negativos por debajo del objetivo.</div>
+<div class="qa-item"><div class="qa-q">16. ¿Qué es la purga temporal (<code>cut - h</code>)?</div>Separar train y test por el horizonte <code>h</code> (6 velas / 20 días) para eliminar fuga de información futura (<em>data leakage</em>).</div>
+<div class="qa-item"><div class="qa-q">17. ¿Por qué 1m en el bot y diario en Portafolio?</div>En intradía domina el ruido microestructural (solo explotable con reglas rápidas ATR/Bollinger); en portafolios de largo plazo las series diarias capturan ciclos, betas y correlaciones macro.</div>
+<div class="qa-item"><div class="qa-q">18. ¿Qué pasa si una vela toca TP y SL a la vez?</div>Criterio pesimista en <code>step_auto_trading</code>: evalúa primero liquidación, luego SL y al último TP.</div>
+<div class="qa-item"><div class="qa-q">19. ¿Cómo funciona Fibonacci + Velocidad + Gann en el código?</div>Traza retrocesos 23.6%–78.6% sobre extremos estructurales, líneas de velocidad 1/3 y 2/3, 3 directrices sucesivas (abanico 1-2-3) y ángulos Gann (1×1, 1×2, 1×4).</div>
+<div class="qa-item"><div class="qa-q">20. ¿Cómo integran Gemini y Grok?</div>La App escribe en <code>consultas/{id}</code> con el contexto real y la VM responde vía <code>google-genai</code> (Gemini). En Telegram, el módulo de sentimiento usa xAI (Grok) ponderando 50% X + 35% medios + 15% oficiales.</div>
+
+</body>
+</html>

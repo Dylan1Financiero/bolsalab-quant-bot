@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Fondos (paleta negro + detalles morados) */
+  --bg-app:        #09090D;
+  --bg-panel:      #0E0E14;
+  --bg-panel-2:    #14141D;
+  --bg-input:      #161621;
+  --border:        #1E1E2A;
+  --border-strong: #2D2D3F;
+
+  /* Texto */
+  --text-1: #F1F5F9;
+  --text-2: #94A3B8;
+  --text-3: #64748B;
+
+  /* Mercado */
+  --up:      #22C55E;
+  --up-bg:   rgba(34, 197, 94, 0.14);
+  --down:    #EF4444;
+  --down-bg: rgba(239, 68, 68, 0.14);
+
+  /* Marca BolsaLab (acento morado) */
+  --accent:       #7C5CFF;
+  --accent-hover: #6D4AFF;
+  --accent-light: #A78BFA;
+  --accent-bg:    rgba(124, 92, 255, 0.16);
+  --warning:      #EAB308;
+
+  /* Tipografía */
+  --font-ui:  'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-num: 'JetBrains Mono', monospace;
+  --fs-xs:  11px;
+  --fs-sm:  12px;
+  --fs-md:  13px;
+  --fs-lg:  15px;
+  --fs-xl:  20px;
+  --fs-xxl: 28px;
+
+  /* Espaciado y forma */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --radius-sm: 4px;
+  --radius:    8px;
+  --row-h:     32px;
+  --t-fast:    120ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

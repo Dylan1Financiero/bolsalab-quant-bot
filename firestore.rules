@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function logueado() { return request.auth != null; }
+    // VERSION PRELIMINAR: el bot es gratis para todos. Para volver a cobrar, cambia true por la linea comentada.
+    function esPro() { return true; }
+    // function esPro() { return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.plan == 'pro'; }
+
+    match /usuarios/{uid}/{doc=**} { allow read, write: if logueado() && request.auth.uid == uid; }
+    match /ranking/{uid} { allow read: if logueado(); allow write: if logueado() && request.auth.uid == uid; }
+    // Lo escribe solo el bot (Admin SDK, se salta estas reglas)
+    match /bot/{doc} { allow read: if logueado(); }
+    match /mercado/{doc} { allow read: if logueado(); }
+    match /trades_bot/{doc} { allow read: if logueado(); }
+    // La app pide; el bot responde
+    match /telegram_espejo/{doc} { allow read: if logueado() && esPro(); }
+    match /comandos/{doc} {
+      allow create: if logueado() && request.resource.data.uid == request.auth.uid
+                    && (esPro() || request.resource.data.tipo in ['portafolio', 'analisis']);
+      allow read: if logueado() && resource.data.uid == request.auth.uid;
+    }
+    // Lo escribe el bot (Admin SDK) con el resultado de Markowitz para cada usuario
+    match /portafolios/{doc} { allow read: if logueado() && resource.data.uid == request.auth.uid; }
+    match /consultas/{doc} {
+      allow create: if logueado() && request.resource.data.uid == request.auth.uid;
+      allow read: if logueado() && resource.data.uid == request.auth.uid;
+    }
+  }
+}
