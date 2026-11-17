@@ -36,9 +36,6 @@ const TFS_MERCADO = [
   { id: '1A', tvInterval: 'M', botTf: '1d', largo: '1 mes' },
 ];
 
-const SL_OPCIONES = [1, 2, 3, 5, 8];
-const TP_OPCIONES = [2, 5, 8, 10, 15];
-
 function fmtNum(n, dec = 2) {
   const val = Number(n);
   if (!Number.isFinite(val)) return '0.00';
@@ -106,11 +103,24 @@ export default function MercadoView({
   // Boleta de orden
   const [tipoOrden, setTipoOrden] = useState('compra'); // 'compra' | 'venta'
   const [montoStr, setMontoStr] = useState('500.00');
-  const [apalancamiento, setApalancamiento] = useState(1); // 1 | 5 | 10
-  const [slPct, setSlPct] = useState(3);
-  const [tpPct, setTpPct] = useState(5);
+  const [levStr, setLevStr] = useState('1'); // editable libremente (>= 1)
+  const [slStr, setSlStr] = useState('3');
+  const [tpStr, setTpStr] = useState('5');
   const [ejecutandoOrden, setEjecutandoOrden] = useState(false);
   const [ordenFlash, setOrdenFlash] = useState(null);
+
+  const apalancamiento = useMemo(() => {
+    const n = parseFloat(levStr);
+    return Number.isFinite(n) && n >= 1 ? Math.round(n * 100) / 100 : 1;
+  }, [levStr]);
+  const slPct = useMemo(() => {
+    const n = parseFloat(slStr);
+    return Number.isFinite(n) && n > 0 ? Math.min(99, Math.round(n * 100) / 100) : 3;
+  }, [slStr]);
+  const tpPct = useMemo(() => {
+    const n = parseFloat(tpStr);
+    return Number.isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 5;
+  }, [tpStr]);
 
   useEffect(() => {
     if (!ordenFlash) return undefined;
@@ -974,7 +984,7 @@ export default function MercadoView({
               <span>Apalancamiento</span>
               <span
                 className="mercado-help-dot"
-                title="Multiplica tu exposición usando tu monto como margen."
+                title="Elige un acceso rápido o escribe el apalancamiento que quieras (1x en adelante)."
               >
                 ?
               </span>
@@ -989,45 +999,96 @@ export default function MercadoView({
                   key={lv.id}
                   type="button"
                   className={`mercado-lev-btn ${apalancamiento === lv.id ? 'active' : ''}`}
-                  onClick={() => setApalancamiento(lv.id)}
+                  onClick={() => setLevStr(String(lv.id))}
                 >
                   {lv.label}
                 </button>
               ))}
+              <label
+                className={`mercado-lev-input-wrap ${
+                  ![1, 5, 10].includes(apalancamiento) ? 'active' : ''
+                }`}
+                title="Escribe cualquier apalancamiento (ej. 2, 15, 25, 50)"
+              >
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  inputMode="decimal"
+                  className="mercado-lev-input num"
+                  aria-label="Apalancamiento personalizado"
+                  value={levStr}
+                  onChange={(e) => setLevStr(e.target.value)}
+                  onBlur={() => {
+                    const n = parseFloat(levStr);
+                    setLevStr(
+                      Number.isFinite(n) && n >= 1 ? String(Math.round(n * 100) / 100) : '1'
+                    );
+                  }}
+                />
+                <span className="mercado-lev-suffix">x</span>
+              </label>
             </div>
 
             <div className="mercado-field-label">
-              <span>Protección automática</span>
+              <span>Protección automática (SL / TP)</span>
               <span
                 className="mercado-help-dot"
-                title="Haz clic para ajustar el porcentaje de Stop Loss y Take Profit."
+                title="Escribe el porcentaje de Stop Loss (pérdida máxima) y Take Profit (ganancia)."
               >
                 ?
               </span>
             </div>
             <div className="mercado-prot-row">
-              <button
-                type="button"
-                className="mercado-prot-box"
-                onClick={() => {
-                  const idx = SL_OPCIONES.indexOf(slPct);
-                  setSlPct(SL_OPCIONES[(idx + 1) % SL_OPCIONES.length]);
-                }}
-              >
+              <label className="mercado-prot-box">
                 <span className="prot-lbl">Pérdida máx.</span>
-                <strong className="prot-val num">-{slPct}%</strong>
-              </button>
-              <button
-                type="button"
-                className="mercado-prot-box"
-                onClick={() => {
-                  const idx = TP_OPCIONES.indexOf(tpPct);
-                  setTpPct(TP_OPCIONES[(idx + 1) % TP_OPCIONES.length]);
-                }}
-              >
+                <span className="mercado-prot-input-wrap text-red">
+                  <span>-</span>
+                  <input
+                    type="number"
+                    min="0.1"
+                    max="99"
+                    step="0.5"
+                    inputMode="decimal"
+                    className="mercado-prot-input num"
+                    aria-label="Stop Loss porcentaje"
+                    value={slStr}
+                    onChange={(e) => setSlStr(e.target.value)}
+                    onBlur={() => {
+                      const n = parseFloat(slStr);
+                      setSlStr(
+                        Number.isFinite(n) && n > 0
+                          ? String(Math.min(99, Math.round(n * 100) / 100))
+                          : '3'
+                      );
+                    }}
+                  />
+                  <span>%</span>
+                </span>
+              </label>
+              <label className="mercado-prot-box">
                 <span className="prot-lbl">Ganancia</span>
-                <strong className="prot-val num">+{tpPct}%</strong>
-              </button>
+                <span className="mercado-prot-input-wrap text-green">
+                  <span>+</span>
+                  <input
+                    type="number"
+                    min="0.1"
+                    step="0.5"
+                    inputMode="decimal"
+                    className="mercado-prot-input num"
+                    aria-label="Take Profit porcentaje"
+                    value={tpStr}
+                    onChange={(e) => setTpStr(e.target.value)}
+                    onBlur={() => {
+                      const n = parseFloat(tpStr);
+                      setTpStr(
+                        Number.isFinite(n) && n > 0 ? String(Math.round(n * 100) / 100) : '5'
+                      );
+                    }}
+                  />
+                  <span>%</span>
+                </span>
+              </label>
             </div>
 
             <div className="mercado-calc-rows">

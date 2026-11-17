@@ -6180,13 +6180,13 @@ a[href*="tradingview"] {
 
 .mercado-lev-row {
   display: grid;
-  grid-template-columns: 1.3fr 0.85fr 0.85fr;
+  grid-template-columns: 1.25fr 0.65fr 0.65fr 0.95fr;
   gap: 5px;
   margin-bottom: 10px;
 }
 
 .mercado-lev-btn {
-  height: 26px;
+  height: 28px;
   border-radius: 6px;
   background: #13131E;
   border: 1px solid #242436;
@@ -6204,6 +6204,55 @@ a[href*="tradingview"] {
   font-weight: 600;
 }
 
+.mercado-lev-input-wrap {
+  height: 28px;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: #13131E;
+  border: 1px solid #242436;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  cursor: text;
+}
+
+.mercado-lev-input-wrap:focus-within,
+.mercado-lev-input-wrap.active {
+  background: rgba(124, 92, 255, 0.2);
+  border-color: #8B5CF6;
+}
+
+.mercado-lev-input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #F8FAFC;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: right;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.mercado-lev-input::-webkit-outer-spin-button,
+.mercado-lev-input::-webkit-inner-spin-button,
+.mercado-prot-input::-webkit-outer-spin-button,
+.mercado-prot-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mercado-lev-suffix {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  color: #A78BFA;
+  flex-shrink: 0;
+}
+
 .mercado-prot-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -6212,7 +6261,7 @@ a[href*="tradingview"] {
 }
 
 .mercado-prot-box {
-  height: 30px;
+  height: 32px;
   padding: 0 9px;
   border-radius: 6px;
   background: #12121C;
@@ -6220,13 +6269,41 @@ a[href*="tradingview"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
+  gap: 4px;
+  cursor: text;
+}
+
+.mercado-prot-box:focus-within {
+  border-color: #8B5CF6;
+  background: rgba(124, 92, 255, 0.08);
 }
 
 .prot-lbl {
   font-family: var(--font-ui);
   font-size: 10.5px;
   color: #64748B;
+  white-space: nowrap;
+}
+
+.mercado-prot-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.mercado-prot-input {
+  width: 38px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-align: right;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 .prot-val {
@@ -8431,7 +8508,7 @@ body,
   }
 
   .mercado-lev-row {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1.2fr 0.65fr 0.65fr 0.95fr;
   }
 
   .mercado-amount-box {
