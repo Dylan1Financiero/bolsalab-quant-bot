@@ -49,9 +49,37 @@ El proyecto **BolsaLab** integra en un ecosistema completo conectado en tiempo r
 
 ---
 
-## 3. Especificación Matemática de Modelos y Métricas
+## 3. Arquitectura y Módulos del Frontend (Aplicación Web React)
 
-### 3.1. Test Transversal de Validación Diebold-Mariano (con corrección de Harvey et al., 1997)
+La interfaz web (**BolsaLab**) está construida como una *Single Page Application* (SPA) publicada en **Firebase Hosting** (`https://bolsalab-udem.web.app`), diseñada para operar en tiempo real sin recargas mediante suscripciones reactivas (`onSnapshot`) a **Cloud Firestore**.
+
+### 3.1. Stack Tecnológico del Frontend
+- **Framework y Build:** `React 18.3.1` + `Vite 5.4.11` (`ES Modules`, compilación optimizada para producción en `dist/`).
+- **Backend-as-a-Service (BaaS):** `Firebase SDK 11.0.2` (**Firebase Authentication** con correo/contraseña y Google OAuth + **Cloud Firestore** para estado del bot, órdenes, portafolios y reportes en vivo).
+- **Visualización Financiera:** `lightweight-charts 4.2.1` (gráficos de velas OHLCV con primitiva personalizada `PositionRangePrimitive.js` para trazar Entrada, Take Profit y Stop Loss) + `TradingViewWidget.jsx` + `ChartismoCanvas.jsx` (`HTML5 Canvas`).
+- **Iconografía y UI:** `lucide-react 1.73.0` + hoja de estilos modular responsiva (`index.css`) adaptable a escritorio y móvil.
+
+### 3.2. Flujo de Acceso, Onboarding y Navegación
+1. **Autenticación (`AuthScreen.jsx`):** Pantalla de inicio de sesión y registro con fondo de video institucional en silencio (`/video_interfaz.mp4`), validación de credenciales y asignación automática de saldo virtual inicial para simulación.
+2. **Onboarding (`OnboardingModal.jsx`):** Asistente de 3 pasos al primer ingreso para configurar el perfil del usuario (aprendizaje chartista, *day trading*, portafolios ML o exploración completa).
+3. **Barra de Estado Global (`Navbar.jsx` y `AjustesModal.jsx`):** Muestra en todo momento el estado de conexión del bot en la VM (latido `ts <= 60s`), patrimonio total, P&L diario y ajustes de cuenta.
+
+### 3.3. Módulos y Vistas Principales de la Terminal Web
+
+| Sección (`Navbar`) | Componentes Clave | Funcionalidad Implementada |
+|---|---|---|
+| **1. Mercado** | `MercadoView.jsx`, `TradingViewWidget.jsx`, `MisPosicionesView.jsx`, `CerrarPosicionModal.jsx` | Simulador multi-activo (Cripto, Acciones y ETFs) con boleta de orden Spot y apalancada, **apalancamiento libre editable** (`1x` en adelante), **Stop Loss y Take Profit porcentuales personalizables**, cálculo dinámico de comisión/riesgo, gestión de posiciones abiertas y recomendación del bot / Analista IA. |
+| **2. Trading (bot)** | `BotView.jsx`, `BotCandlesChart.jsx`, `PositionRangePrimitive.js`, `TelegramMenuPanel.jsx`, `CentroResultadosBot.jsx` | Consola en vivo conectada al bot 24/7 en Compute Engine: velas en tiempo real, niveles visuales de Entrada/TP/SL, semáforo de riesgo (`CAViaR`/`CVaR`/`VaR 99%`), espejo bidireccional de Telegram, envío de comandos remotos y centro de reportes (`Winrate`, `Diebold-Mariano`, `Sentimiento`, `Órdenes`). |
+| **3. Portafolio** | `PortafolioMLView.jsx`, `PortfolioDashboard.jsx`, `MisPortafoliosInvertidos.jsx` | Asistente cuantitativo por pasos (Opciones 1, 2 y 5): clasificación de régimen de volatilidad (`baja`/`media`/`alta`), regresión de retornos (`RF`, `KNN` Euclidiana, `MLP`), **Matriz de Correlación de Pearson**, **Frontera Eficiente de Markowitz** (5 carteras), comparación fuera de muestra vs. `S&P 500` y seguimiento de carteras invertidas. |
+| **4. Aprender** | `JuegoView.jsx`, `ChartismoCanvas.jsx` | Módulo interactivo de entrenamiento visual sobre **38 figuras chartistas** en canvas con sistema de puntuación (XP) y ranking. |
+| **5. Modelo ML** | `ModeloMLView.jsx` | Tablero de validación estadística fuera de muestra: KPIs de acierto vs. modelo ingenuo, `F1` macro, estadístico **Diebold-Mariano** (vs. caminata aleatoria y vs. CatBoost), tabla comparativa de hiperparámetros (`Random Forest` y `CatBoost`) y comparativa de impacto del filtro ML en XRP. |
+| **6. Analista IA** | `AnalistaIAView.jsx` | Analista financiero conversacional impulsado por **Google Gemini** y módulo de sentimiento en X con **xAI (Grok)** bajo ponderación híbrida `50/35/15`, integrando contexto técnico y métricas de riesgo. |
+
+---
+
+## 4. Especificación Matemática de Modelos y Métricas
+
+### 4.1. Test Transversal de Validación Diebold-Mariano (con corrección de Harvey et al., 1997)
 Dados los errores de pronóstico $e_{1,t} = y_t - \hat{y}_{1,t}$ (modelo candidato) y $e_{2,t} = y_t - \hat{y}_{2,t}$ (referencia ingenua o segundo modelo), el diferencial de pérdida cuadrática es:
 
 $$d_t = e_{1,t}^2 - e_{2,t}^2, \qquad \bar{d} = \frac{1}{n}\sum_{t=1}^{n} d_t$$
@@ -66,7 +94,7 @@ $$DM = \frac{\bar{d}}{\sqrt{\widehat{V}(\bar{d})}} \cdot \sqrt{\frac{n + 1 - 2h 
 
 - **Regla de decisión:** Si $DM < 0$ y $p < 0.05$, el modelo candidato tiene menor error de forma estadísticamente significativa; si $DM > 0$ y $p < 0.05$, es significativamente peor que la referencia.
 
-### 3.2. Métricas de Error de Predicción y Clasificación en Machine Learning
+### 4.2. Métricas de Error de Predicción y Clasificación en Machine Learning
 - **Regresión:**
 
 $$MAE = \frac{1}{n}\sum_{t=1}^{n}|e_t|, \qquad MSE = \frac{1}{n}\sum_{t=1}^{n}e_t^2, \qquad RMSE = \sqrt{MSE}$$
@@ -81,7 +109,7 @@ $$\text{Precision}_c = \frac{TP_c}{TP_c + FP_c}, \qquad \text{Recall}_c = \frac{
 
 $$d(x, x_i) = \sqrt{\sum_{j=1}^{p} (x_j - x_{ij})^2}, \qquad w_i = \frac{1}{d(x, x_i)}$$
 
-### 3.3. Estrategia Técnica, Salidas ATR y Riesgo Operativo del Bot
+### 4.3. Estrategia Técnica, Salidas ATR y Riesgo Operativo del Bot
 1. **Bandas de Bollinger (20, 2σ) y Tendencia EMA 200:**
 
 $$MA_{20,t} = \frac{1}{20}\sum_{i=0}^{19} C_{t-i}, \qquad \sigma_{20,t} = \sqrt{\frac{1}{20}\sum_{i=0}^{19}(C_{t-i}-MA_{20,t})^2}, \qquad BB_{\pm} = MA_{20,t} \pm 2\sigma_{20,t}$$
@@ -104,7 +132,7 @@ $$WR^* = \frac{SL}{TP + SL} = \frac{0.4}{2.0 + 0.4} = 16.7\%, \qquad PF = \frac{
    - **Acciones (CVaR 99%, límite 2.20%):** $CVaR_{99\%} = -\mathbb{E}[r \mid r \le q_{0.01}(r)]$
    - **ETFs (VaR 99%, límite 1.50%):** $VaR_{99\%} = -q_{0.01}(r)$
 
-### 3.4. Optimización Cuantitativa de Portafolios (Markowitz y Pearson)
+### 4.4. Optimización Cuantitativa de Portafolios (Markowitz y Pearson)
 - **Correlación de Pearson y Covarianza:**
 
 $$\rho_{ij} = \frac{\mathrm{Cov}(r_i, r_j)}{\sigma_i \sigma_j}, \qquad \Sigma_{ij} = \rho_{ij}\sigma_i\sigma_j$$
@@ -115,9 +143,9 @@ $$\mu = 0.5\,\mu_{ML} + 0.5\,\mu_{\text{hist}}, \qquad \text{Sharpe} = \frac{w^\
 
 ---
 
-## 4. Resultados Empíricos, Monte Carlo y Validación Estadística
+## 5. Resultados Empíricos, Monte Carlo y Validación Estadística
 
-### 4.1. Evolución del Bot y Simulaciones Monte Carlo (15,000 combinaciones)
+### 5.1. Evolución del Bot y Simulaciones Monte Carlo (15,000 combinaciones)
 El análisis de 15,000 combinaciones de estrategia, TP, SL y temporalidad sobre 9 criptomonedas (>1,400 millones de operaciones simuladas) demostró que buscar un porcentaje de aciertos alto llevaba a pérdidas:
 
 | Etapa / Configuración | Aciertos (Win Rate) | Profit Factor | Resultado |
@@ -131,7 +159,7 @@ El análisis de 15,000 combinaciones de estrategia, TP, SL y temporalidad sobre 
 
 Comparativa en XRP (1m, mismas salidas TP 2.0 / SL 0.4 ATR): **Bollinger con tendencia (1.67)** > Cruce de medias 50/200 (1.44) > Bollinger sin tendencia (1.17) > RSI (1.13) > Chartismo (0.99) > Fibonacci (0.98) > SuperTrend (0.75). En vivo tras activar la versión final de Bollinger, las primeras operaciones reales ya confirmaron la asimetría 5:1 (`−$0.23` y `−$0.22` en Stop Loss vs. `+$1.28` y `+$1.59` en Take Profit, **`PF > 6`**, **`+$2.42 USDT`**).
 
-### 4.2. Validación ML Fuera de Muestra y Simulación de Hiperparámetros (Opción 3)
+### 5.2. Validación ML Fuera de Muestra y Simulación de Hiperparámetros (Opción 3)
 Prueba fuera de muestra en **BTC 1h (`h = 6`, 393 entrenamiento, 171 prueba, purga de `h` velas)**:
 
 | Modelo | Árboles | Prof. | MAE ($) | MSE | RMSE ($) | DM vs. Caminata | p-valor |
@@ -147,20 +175,20 @@ Prueba fuera de muestra en **BTC 1h (`h = 6`, 393 entrenamiento, 171 prueba, pur
   - Movimiento en contra: `ATR × 2.02` logra MAE `0.222%` vs. RF `0.235%` (`DM = +3.52, p < 0.001`).
   - **Conclusión de diseño:** Por evidencia estadística de Diebold-Mariano, las salidas se fijan con **ATR** y no con regresión RF; asimismo se eliminó el bloqueo de entradas RF (`PF 2.25`, `22 ops/día`, `+70 USDT`) conservando RF únicamente para escalar el apalancamiento a **x15 en XRP** ante alta convicción (`prob >= 50%` y `valor esperado >= 0.15%`).
 
-### 4.3. Portafolio de Inversión (Opciones 1 y 2)
+### 5.3. Portafolio de Inversión (Opciones 1 y 2)
 - Evaluado sobre series diarias (`~5` años, corte `2025-07-25`, 11,280 obs. train / 4,976 obs. test, purga de `20` días).
 - Se muestran en la app todas las métricas exigidas: `Accuracy`, `F1` macro y `F1` por clase (`baja`, `media`, `alta`), matriz de confusión 3×3 y 2×2, `RMSE`, `MSE`, `MAE`, `MAPE`, `SMAPE`, `Variance Score`, `Sharpe`, `Sortino`, `VaR/CVaR 95%`, **Matriz de Correlación de Pearson** y comparación fuera de muestra frente al `S&P 500`.
 
 ---
 
-## 5. Limitaciones y Líneas Futuras
+## 6. Limitaciones y Líneas Futuras
 
 1. El backtest intensivo en velas de 1 minuto abarca 1 semana (9–15 de noviembre de 2026) y **no incluye comisiones del exchange ni deslizamiento (*slippage*)**, lo cual se reporta explícitamente como limitación del estudio. Se recomienda extender la validación a múltiples meses e incorporar comisiones en simulaciones futuras.
 2. En el dominio de velas de 1m–1h se verifica empíricamente la hipótesis de mercados eficientes en forma débil (ningún modelo ML supera de forma significativa a la caminata aleatoria en dirección pura), reforzando que la rentabilidad proviene de la gestión asimétrica de riesgo (`5:1` ATR), filtro de tendencia (`EMA 200`) y freno de cola (`CAViaR 99%`).
 
 ---
 
-## 6. Referencias (APA 7)
+## 7. Referencias (APA 7)
 
 - Bollinger, J. (2001). *Bollinger on Bollinger Bands*. McGraw-Hill.
 - Breiman, L. (2001). Random forests. *Machine Learning, 45*(1), 5–32. https://doi.org/10.1023/A:1010933404324
