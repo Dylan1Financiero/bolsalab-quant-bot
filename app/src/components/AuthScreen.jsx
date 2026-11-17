@@ -69,6 +69,24 @@ export default function AuthScreen({ onToast }) {
 
   return (
     <div className="auth-wrapper">
+      <video
+        className="bg-video-layer"
+        src="/video_interfaz.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        ref={(el) => {
+          if (el) {
+            el.muted = true;
+            el.defaultMuted = true;
+            el.volume = 0;
+          }
+        }}
+      />
+      <div className="bg-video-scrim" aria-hidden="true" />
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-brand">

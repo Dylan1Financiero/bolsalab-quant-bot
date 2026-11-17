@@ -162,6 +162,24 @@ export default function OnboardingModal({
 
   return (
     <div className="onb-overlay" role="dialog" aria-modal="true" aria-label="Asistente de bienvenida">
+      <video
+        className="bg-video-layer"
+        src="/video_interfaz.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        ref={(el) => {
+          if (el) {
+            el.muted = true;
+            el.defaultMuted = true;
+            el.volume = 0;
+          }
+        }}
+      />
+      <div className="bg-video-scrim" aria-hidden="true" />
       <div className="panel onb-modal">
         <div className="onb-top">
           <div>
